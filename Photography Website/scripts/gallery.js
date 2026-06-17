@@ -98,21 +98,28 @@
     });
   }
 
-  // Preload all images to get natural dimensions, then build columns
+  // Preload all images to get natural dimensions, then build columns.
+  // probeTimeout is a safety net: if any probe silently stalls (e.g. Brave
+  // shields stall a request so neither onload nor onerror fires), the grid
+  // still renders after 5 s using 1:1 aspect-ratio fallbacks for missed probes.
   var remaining = category.photos.length;
+  var probeTimeout;
   if (remaining === 0) {
     dimsReady = true;
     buildGrid();
   } else {
+    probeTimeout = setTimeout(function () {
+      if (!dimsReady) { dimsReady = true; buildGrid(); }
+    }, 5000);
     category.photos.forEach(function (photo, i) {
       var probe = new Image();
       probe.onload = function () {
         dims[i] = { w: probe.naturalWidth || 1, h: probe.naturalHeight || 1 };
-        if (--remaining === 0) { dimsReady = true; buildGrid(); }
+        if (--remaining === 0) { clearTimeout(probeTimeout); dimsReady = true; buildGrid(); }
       };
       probe.onerror = function () {
         dims[i] = { w: 1, h: 1 };
-        if (--remaining === 0) { dimsReady = true; buildGrid(); }
+        if (--remaining === 0) { clearTimeout(probeTimeout); dimsReady = true; buildGrid(); }
       };
       probe.src = photo.src;
     });
