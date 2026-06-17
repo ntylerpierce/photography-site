@@ -21,6 +21,7 @@ A personal photography portfolio website that displays photos in a categorized g
 - **Styling:** CSS custom properties; no CSS frameworks unless explicitly requested
 - **Images:** Static files in `/images/<category>/` folders
 - **No backend required** — purely static site
+- **Deployment:** Vercel, plain static site. A `vercel.json` at the project root sets no framework preset and output directory to `.` (the project root). No build step.
 
 ---
 
@@ -79,14 +80,16 @@ photography-portfolio/
 ### 1. Home (`index.html`)
 - No hero image. Open directly to the site name (small, uppercase, ultra-light weight, top-left) and category list.
 - Category list: a clean vertical stack on the left (desktop) or stacked full-width (mobile) — just the category name and photo count in muted gray. Nothing else.
-- To the right of the list (desktop): a silent, slow crossfade cycling through 1 representative image per category every 4 seconds. No controls, no indicators. Just images quietly changing.
+- To the right of the list (desktop): a silent, slow crossfade cycling through all photos across all categories every 4 seconds. No controls, no indicators. Just images quietly changing.
+- The full photo pool (every photo from every category) is shuffled randomly at page load. Each photo is shown exactly once before the pool reshuffles — no photo repeats until all have been displayed.
+- All preview images use `object-fit: contain` with a transparent (black) background so portrait/vertical images are never cropped.
 - No footer. The page ends when the content ends.
 
 ### 2. Gallery (`gallery.html?category=landscapes`)
 - Pure black page. No header graphic, no hero.
 - Nav: site name top-left (ultra-light), category links top-right (uppercase, small, tracked) — both white at `0.5` opacity, full on hover.
 - Active category: `opacity: 1`; all others at `0.4`.
-- Photo grid: 3 equal columns desktop, 2 tablet, 1 mobile. Tight `6px` gaps. No card backgrounds, no borders. Consistent row heights (contact-sheet feel). `object-fit: cover`.
+- Photo grid: 3 equal columns desktop, 2 tablet, 1 mobile. Tight `6px` gaps. No card backgrounds, no borders. Consistent row heights (contact-sheet feel). `object-fit: contain` with transparent (black) background so portrait/vertical images are never cropped.
 - No hover effects on photos — completely still until clicked.
 
 ### 3. Lightbox (overlay, no separate page)
