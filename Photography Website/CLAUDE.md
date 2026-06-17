@@ -31,13 +31,16 @@ A personal photography portfolio website that displays photos in a categorized g
 photography-portfolio/
 ├── index.html           # Landing page with category grid
 ├── gallery.html         # Category gallery page (filtered by ?category=)
+├── sync-gallery.sh      # Single workflow script — scan → diff → commit → push
 ├── styles/
 │   ├── base.css         # Reset, tokens, typography
 │   ├── layout.css       # Grid, nav, footer
 │   └── gallery.css      # Gallery grid + lightbox
 ├── scripts/
-│   ├── gallery.js       # Masonry/grid render + lightbox logic
-│   └── categories.js    # Category data and image manifest
+│   ├── gallery.js             # Masonry/grid render + lightbox logic
+│   ├── categories.js          # Category data and image manifest (auto-generated)
+│   ├── generate-categories.ps1  # PowerShell generator called by sync-gallery.sh
+│   └── home.js                # Silent crossfade on home page
 ├── images/
 │   ├── landscapes/
 │   ├── portraits/
@@ -130,6 +133,49 @@ const CATEGORIES = [
   // Add categories as needed
 ];
 ```
+
+---
+
+## Photo Management Workflow
+
+**`sync-gallery.sh` is the single script for all photo and category updates.** Run it from Git Bash at the project root after making any changes to the `images/` folder — adding photos, deleting photos, adding a new category folder, renaming or removing a category folder.
+
+```bash
+bash sync-gallery.sh
+```
+
+### What it does on each run
+
+1. **Parses** `scripts/categories.js` to read the currently registered categories and photos.
+2. **Scans** the `images/` folder to see what actually exists on disk.
+3. **Diffs** the two:
+   - New category folders not yet in `categories.js` → detected as added
+   - Category folders that have been renamed or deleted → detected as removed
+   - New image files inside any category folder → detected as added
+   - Image files that have been renamed or deleted → detected as removed
+4. **If nothing changed:** exits immediately with `No changes detected — nothing to update.`
+5. **If changes were found:**
+   - Regenerates `scripts/categories.js` to exactly reflect the current `images/` folder
+   - Stages `images/` and `scripts/categories.js`
+   - Commits with an auto-generated message describing what changed and the date, e.g.:
+     `Sync gallery: added 1 category (wildlife); added 3 photos -- 2026-06-17`
+   - Pushes to GitHub (Vercel auto-deploys on push)
+
+### Typical workflows
+
+**Add photos to an existing category:**
+Drop the files into the appropriate `images/<category>/` folder, then run `bash sync-gallery.sh`.
+
+**Add a new category:**
+Create a new subfolder under `images/` (e.g. `images/street/`), add photos to it, then run `bash sync-gallery.sh`. The folder name becomes the category `id`; the label is auto-capitalized from the folder name.
+
+**Rename a category:**
+Rename the folder in `images/` (e.g. `images/flight/` → `images/aviation/`), then run `bash sync-gallery.sh`. The old category is removed and the new one is added automatically.
+
+**Remove a category:**
+Delete the folder from `images/`, then run `bash sync-gallery.sh`.
+
+> **Note:** `scripts/categories.js` is fully auto-generated on every sync — do not edit it by hand. The cover image for each category defaults to the first file alphabetically in that folder. To pin a specific cover, name the file `cover.jpg` (or any image extension starting with `cover.`).
 
 ---
 
