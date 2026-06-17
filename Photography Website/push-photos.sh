@@ -7,7 +7,7 @@ cd "$SCRIPT_DIR"
 
 # 1. Regenerate categories.js from the current images/ folders
 echo "Scanning images/ and regenerating categories.js..."
-node scripts/generate-categories.js
+powershell.exe -ExecutionPolicy Bypass -File scripts/generate-categories.ps1
 
 # 2. Stage all new/modified images and the updated categories.js
 git add images/ scripts/categories.js
