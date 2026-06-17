@@ -5,9 +5,18 @@ const CATEGORIES = [
   {
     id: "architecture",
     label: "Architecture",
-    cover: "images/architecture/DSC00197.jpg",
+    cover: "images/architecture/_LVA1506-Pano.jpg",
     photos: [
-      { src: "images/architecture/DSC00197.jpg", date: "" },
+      { src: "images/architecture/_LVA1506-Pano.jpg", title: "LVA1506 Pano", date: "" },
+      { src: "images/architecture/_LVA1520.jpg", date: "" },
+      { src: "images/architecture/ATP_9268.jpg", date: "" },
+      { src: "images/architecture/DSC_0191.jpg", date: "" },
+      { src: "images/architecture/DSC_2735.jpg", date: "" },
+      { src: "images/architecture/DSC_8597.jpg", date: "" },
+      { src: "images/architecture/DSC_8628.jpg", date: "" },
+      { src: "images/architecture/DSC_8635.jpg", date: "" },
+      { src: "images/architecture/DSC_8641.jpg", date: "" },
+      { src: "images/architecture/DSC00115-Pano.jpg", title: "DSC00115 Pano", date: "" },
       { src: "images/architecture/DSC00226.jpg", date: "" },
       { src: "images/architecture/DSC00236.jpg", date: "" },
       { src: "images/architecture/DSC00237.jpg", date: "" },
@@ -18,11 +27,16 @@ const CATEGORIES = [
   {
     id: "flight",
     label: "Flight",
-    cover: "images/flight/CCBAS-123.jpg",
+    cover: "images/flight/CCBAS-114.jpg",
     photos: [
+      { src: "images/flight/CCBAS-114.jpg", date: "" },
       { src: "images/flight/CCBAS-123.jpg", date: "" },
+      { src: "images/flight/CCBAS-140.jpg", date: "" },
+      { src: "images/flight/CCBAS-145.jpg", date: "" },
+      { src: "images/flight/CCBAS-163.jpg", date: "" },
       { src: "images/flight/CCBAS-185.jpg", date: "" },
       { src: "images/flight/CCBAS-77.jpg", date: "" },
+      { src: "images/flight/CCBAS-86.jpg", date: "" },
       { src: "images/flight/CCBAS-99.jpg", date: "" },
       { src: "images/flight/DSC_6065.jpg", date: "" },
       { src: "images/flight/DSC_6067-Enhanced-NR.jpg", title: "DSC 6067 Enhanced NR", date: "" },
@@ -34,8 +48,14 @@ const CATEGORIES = [
     cover: "images/landscapes/_LVA3512.jpg",
     photos: [
       { src: "images/landscapes/_LVA3512.jpg", date: "" },
+      { src: "images/landscapes/_LVA3525-Pano.jpg", title: "LVA3525 Pano", date: "" },
+      { src: "images/landscapes/_LVA3701.jpg", date: "" },
       { src: "images/landscapes/_LVA3841-HDR.jpg", title: "LVA3841 HDR", date: "" },
       { src: "images/landscapes/_LVA3961-HDR.jpg", title: "LVA3961 HDR", date: "" },
+      { src: "images/landscapes/DSC_7207.jpg", date: "" },
+      { src: "images/landscapes/DSC_8271-Pano.jpg", title: "DSC 8271 Pano", date: "" },
+      { src: "images/landscapes/DSC_8640-Pano.jpg", title: "DSC 8640 Pano", date: "" },
+      { src: "images/landscapes/DSC02348.jpg", date: "" },
     ]
   },
   {
@@ -44,8 +64,13 @@ const CATEGORIES = [
     cover: "images/portraits/DSC_4273.jpg",
     photos: [
       { src: "images/portraits/DSC_4273.jpg", date: "" },
+      { src: "images/portraits/DSC_5710.jpg", date: "" },
+      { src: "images/portraits/DSC_6020.jpg", date: "" },
       { src: "images/portraits/DSC_6882.jpg", date: "" },
+      { src: "images/portraits/DSC_6886.jpg", date: "" },
       { src: "images/portraits/DSC_7377.jpg", date: "" },
+      { src: "images/portraits/DSC_8536.jpg", date: "" },
+      { src: "images/portraits/DSC_9038.jpg", date: "" },
       { src: "images/portraits/Wedding.jpg", title: "Wedding", date: "" },
     ]
   },
