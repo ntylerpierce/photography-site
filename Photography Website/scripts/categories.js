@@ -56,6 +56,7 @@ const CATEGORIES = [
       { src: "images/landscapes/DSC_8271-Pano.jpg", title: "DSC 8271 Pano", date: "" },
       { src: "images/landscapes/DSC_8640-Pano.jpg", title: "DSC 8640 Pano", date: "" },
       { src: "images/landscapes/DSC02348.jpg", date: "" },
+      { src: "images/landscapes/test-new-photo.jpg", title: "Test New Photo", date: "" },
     ]
   },
   {
