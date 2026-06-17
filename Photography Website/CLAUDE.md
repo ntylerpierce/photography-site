@@ -1,5 +1,77 @@
 # Photography Portfolio Website — Project Brief
 
+---
+
+## Project State *(read this first — gives 90% of session context)*
+
+### File Structure (complete, as of 2026-06-17)
+
+```
+photography-portfolio/
+├── index.html                        # Home page: category list left + silent cycling image right
+├── gallery.html                      # Gallery page: grid + lightbox, filtered by ?category=
+├── vercel.json                       # Deployment config — no framework, output dir = "."
+├── sync-gallery.sh                   # PRIMARY workflow script (see Scripts below)
+├── push-photos.sh                    # Legacy simpler push script (no diff check — prefer sync-gallery.sh)
+├── CLAUDE.md                         # This file
+├── styles/
+│   ├── base.css                      # ← DO NOT RE-READ UNLESS ASKED (see below)
+│   ├── layout.css                    # ← DO NOT RE-READ UNLESS ASKED (see below)
+│   └── gallery.css                   # Gallery grid + lightbox styles
+├── scripts/
+│   ├── gallery.js                    # Grid render + lightbox logic (open/close, nav, swipe, keyboard)
+│   ├── home.js                       # Silent crossfade cycling through all photos on home page
+│   ├── categories.js                 # AUTO-GENERATED — do not edit by hand
+│   ├── generate-categories.js        # Node.js generator: node scripts/generate-categories.js
+│   └── generate-categories.ps1       # PowerShell generator: called by push-photos.sh
+└── images/
+    ├── architecture/                 # 15 photos
+    ├── flight/                       # 15 photos
+    ├── landscapes/                   # 9 photos
+    ├── portraits/                    # 9 photos
+    └── rockets/                      # 17 photos
+```
+
+### Scripts — what each one does
+
+| Script | One-sentence summary |
+|---|---|
+| `sync-gallery.sh` | **Primary workflow** — diffs `images/` against `categories.js`, regenerates it if changed, then commits and pushes; exits with no-op if nothing changed. |
+| `push-photos.sh` | Older, simpler push script — regenerates `categories.js` unconditionally, stages image files, commits, and pushes; does not diff first. |
+| `scripts/generate-categories.js` | Node.js generator that scans `images/` subfolders and writes a fresh `scripts/categories.js`; run with `node scripts/generate-categories.js`. |
+| `scripts/generate-categories.ps1` | PowerShell equivalent of the above; called internally by `push-photos.sh` via `powershell.exe`. |
+
+> **Prefer `sync-gallery.sh`** for all photo management — it's the complete, idempotent workflow.
+
+### Current Categories
+
+| Category | Folder | Photo count |
+|---|---|---|
+| Landscapes | `images/landscapes/` | 9 |
+| Portraits | `images/portraits/` | 9 |
+| Architecture | `images/architecture/` | 15 |
+| Flight | `images/flight/` | 15 |
+| Rockets | `images/rockets/` | 17 |
+
+`categories.js` is auto-generated from these folders — never edit it by hand. Cover image defaults to the first file alphabetically, or any file named `cover.*`.
+
+### Deployment
+
+- **Host:** Vercel (auto-deploys on every push to GitHub `main`)
+- **Build step:** None — `vercel.json` sets no framework preset and serves the project root directly
+- **Workflow:** Edit files locally → `bash sync-gallery.sh` (or `git commit && git push`) → Vercel deploys automatically
+
+### Do Not Re-Read Unless Asked
+
+These files are stable and rarely change. Skip them at session start; only read them if directly debugging their content:
+
+- `styles/base.css` — CSS reset, custom property tokens, typography rules; settled design system
+- `styles/layout.css` — nav, footer, home-page two-column layout; structurally stable
+- `index.html` — home page HTML structure; changes only when adding new layout sections
+- `vercel.json` — one-line deployment config; almost never changes
+
+---
+
 ## Project Overview
 
 A personal photography portfolio website that displays photos in a categorized gallery format. The site should feel like a curated exhibition space: dark, minimal, and image-first. Every design decision defers to the photographs themselves.
