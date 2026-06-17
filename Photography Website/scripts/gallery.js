@@ -46,6 +46,11 @@
     img.src = photo.src;
     img.alt = photo.title;
     img.loading = 'lazy';
+    img.addEventListener('load', function () {
+      if (img.naturalHeight > img.naturalWidth) {
+        img.classList.add('portrait');
+      }
+    });
     div.appendChild(img);
     div.addEventListener('click', function () { openLightbox(i); });
     grid.appendChild(div);
