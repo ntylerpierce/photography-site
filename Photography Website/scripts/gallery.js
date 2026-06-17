@@ -38,23 +38,93 @@
     if (window.scrollY > 40) navLogo.classList.add('nav__logo--dim');
   });
 
-  // Build photo grid
-  category.photos.forEach(function (photo, i) {
-    var div = document.createElement('div');
-    div.className = 'grid__item';
-    var img = document.createElement('img');
-    img.src = photo.src;
-    img.alt = photo.title;
-    img.loading = 'lazy';
-    img.addEventListener('load', function () {
-      if (img.naturalHeight > img.naturalWidth) {
-        img.classList.add('portrait');
+  // ── Masonry column balancer ────────────────────────────────────────────
+  var dims = {};
+  var dimsReady = false;
+  var resizeTimer;
+
+  function getNumCols() {
+    var w = window.innerWidth;
+    if (w <= 375) return 1;
+    if (w <= 768) return 2;
+    return 3;
+  }
+
+  function buildGrid() {
+    grid.innerHTML = '';
+
+    var numCols = getNumCols();
+    var GAP = window.innerWidth <= 768 ? 4 : 6;
+    var columns = [];
+    var colHeights = [];
+
+    for (var c = 0; c < numCols; c++) {
+      var col = document.createElement('div');
+      col.className = 'grid__col';
+      grid.appendChild(col);
+      columns.push(col);
+      colHeights.push(0);
+    }
+
+    var colWidth = (grid.offsetWidth - (numCols - 1) * GAP) / numCols;
+    if (colWidth <= 0) colWidth = 300;
+
+    category.photos.forEach(function (photo, i) {
+      var dim = dims[i] || { w: 1, h: 1 };
+      var imgHeight = colWidth * (dim.h / dim.w);
+
+      var minH = Infinity;
+      var targetCol = 0;
+      for (var c = 0; c < numCols; c++) {
+        if (colHeights[c] < minH) {
+          minH = colHeights[c];
+          targetCol = c;
+        }
       }
+
+      colHeights[targetCol] += (colHeights[targetCol] > 0 ? GAP : 0) + imgHeight;
+
+      var div = document.createElement('div');
+      div.className = 'grid__item';
+      var img = document.createElement('img');
+      img.src = photo.src;
+      img.alt = photo.title;
+      img.loading = 'lazy';
+      div.appendChild(img);
+      div.addEventListener('click', (function (idx) {
+        return function () { openLightbox(idx); };
+      })(i));
+      columns[targetCol].appendChild(div);
     });
-    div.appendChild(img);
-    div.addEventListener('click', function () { openLightbox(i); });
-    grid.appendChild(div);
-  });
+  }
+
+  // Preload all images to get natural dimensions, then build columns
+  var remaining = category.photos.length;
+  if (remaining === 0) {
+    dimsReady = true;
+    buildGrid();
+  } else {
+    category.photos.forEach(function (photo, i) {
+      var probe = new Image();
+      probe.onload = function () {
+        dims[i] = { w: probe.naturalWidth || 1, h: probe.naturalHeight || 1 };
+        if (--remaining === 0) { dimsReady = true; buildGrid(); }
+      };
+      probe.onerror = function () {
+        dims[i] = { w: 1, h: 1 };
+        if (--remaining === 0) { dimsReady = true; buildGrid(); }
+      };
+      probe.src = photo.src;
+    });
+  }
+
+  window.addEventListener('resize', function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function () {
+      if (dimsReady) buildGrid();
+    }, 200);
+  }, { passive: true });
+  // ── End masonry ───────────────────────────────────────────────────────
 
   // Lightbox
   var lightbox = document.getElementById('lightbox');
